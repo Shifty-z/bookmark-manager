@@ -8,6 +8,9 @@ import (
 
 const (
 	ExitWithFailure = 1
+	OSMac           = "darwin"
+	OSLinux         = "linux"
+	OSWindows       = "windows"
 )
 
 type Category struct {
@@ -37,6 +40,7 @@ type CmdFlags struct {
 	ShouldEdit    bool
 	ShouldAdd     bool
 	ShouldDelete  bool
+	ShouldSelect  bool
 }
 
 type Handles struct {
