@@ -5,7 +5,14 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"os/exec"
+	"runtime"
 	"strconv"
+	"strings"
+)
+
+const (
+	URLRequiredPrefix = "https://www."
 )
 
 func ListAll(categories []Category) {
@@ -17,10 +24,10 @@ func ListAll(categories []Category) {
 			continue
 		}
 
-		fmt.Printf("%d %s\n", catIdx+1, value.String())
+		fmt.Printf("%d %s\n", catIdx, value.String())
 
 		for bookmarkIdx, bookmark := range value.Bookmarks {
-			fmt.Printf("--> %d %s\n", bookmarkIdx+1, bookmark.String())
+			fmt.Printf("--> %d %s\n", bookmarkIdx, bookmark.String())
 		}
 		fmt.Println("")
 	}
@@ -68,6 +75,11 @@ func Add(handles *Handles) {
 
 	fmt.Print("Enter a URL for the bookmark: ")
 	newUrl := getScannedInput(handles.Scanner)
+
+	// Mac's open command will not work unless http or https is included as a prefix
+	if !strings.HasPrefix(newUrl, URLRequiredPrefix) {
+		newUrl = URLRequiredPrefix + newUrl
+	}
 
 	fmt.Print("Describe the bookmark. What's it for? ")
 	newDesc := getScannedInput(handles.Scanner)
@@ -124,6 +136,48 @@ func Delete(handles *Handles) {
 	fmt.Printf("Bookmark: %s has been removed from category %s\n", name, (*handles.Categories)[indexes.CategoryIndex].Type)
 
 	writeFile(handles)
+}
+
+func Select(handles *Handles) {
+	fmt.Print("Enter the category number the bookmark is in: ")
+	categoryInput := getScannedInput(handles.Scanner)
+	fmt.Printf("You entered category '%s'\n", categoryInput)
+
+	fmt.Print("Enter the bookmark number: ")
+	bookmarkInput := getScannedInput(handles.Scanner)
+	fmt.Printf("You entered bookmark number: '%s'\n", bookmarkInput)
+
+	categoryNumber, catConvertErr := strconv.Atoi(categoryInput)
+	bookmarkNumber, bookmarkConvertErr := strconv.Atoi(bookmarkInput)
+
+	if catConvertErr != nil {
+		fmt.Printf("Could not convert input while selecting a category. Error: %v\n", catConvertErr)
+		os.Exit(ExitWithFailure)
+	}
+
+	if bookmarkConvertErr != nil {
+		fmt.Printf("Could not convert input while selecting a bookmark. Error: %v\n", bookmarkConvertErr)
+		os.Exit(ExitWithFailure)
+	}
+
+	fmt.Printf("Selected Category '%s' bookmark named %s\n", (*handles.Categories)[categoryNumber].Type, (*handles.Categories)[categoryNumber].Bookmarks[bookmarkNumber].Name)
+	selectedURL := (*handles.Categories)[categoryNumber].Bookmarks[bookmarkNumber].Url
+
+	operatingSystem := runtime.GOOS
+	switch operatingSystem {
+	case OSMac:
+		startErr := exec.Command("open", selectedURL).Start()
+		if startErr != nil {
+			fmt.Printf("Error opening the browser to %s because of error: %v\n", selectedURL, startErr)
+			os.Exit(ExitWithFailure)
+		}
+	case OSLinux:
+		fmt.Println("Linux is not supported, yet.")
+		os.Exit(ExitWithFailure)
+	case OSWindows:
+		fmt.Println("Windows is not supported, yet.")
+		os.Exit(ExitWithFailure)
+	}
 }
 
 func writeFile(handles *Handles) {
