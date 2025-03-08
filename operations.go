@@ -12,7 +12,8 @@ import (
 )
 
 const (
-	URLRequiredPrefix = "https://www."
+	URLRequiredPrefixProtocol = "https://"
+	URLRequiredPrefixWWWDot   = "www."
 )
 
 func ListAll(categories []Category) {
@@ -76,9 +77,22 @@ func AddBookmark(handles *Handles) {
 	fmt.Print("Enter a URL for the bookmark: ")
 	newUrl := getScannedInput(handles.Scanner)
 
-	// Mac's open command will not work unless http or https is included as a prefix
-	if !strings.HasPrefix(newUrl, URLRequiredPrefix) {
-		newUrl = URLRequiredPrefix + newUrl
+	protocolHttp := "http://"
+	hasHttpProtocol := strings.HasPrefix(newUrl, protocolHttp)
+	if hasHttpProtocol {
+		protocolLength := len(protocolHttp)
+		newUrl = URLRequiredPrefixProtocol + newUrl[protocolLength:]
+	}
+
+	hasHttpsProtocol := strings.HasPrefix(newUrl, URLRequiredPrefixProtocol)
+	hasWwwDot := strings.Contains(newUrl, URLRequiredPrefixWWWDot)
+	if !hasHttpsProtocol && !hasWwwDot {
+		newUrl = URLRequiredPrefixProtocol + URLRequiredPrefixWWWDot + newUrl
+	} else if !hasHttpsProtocol && hasWwwDot {
+		newUrl = URLRequiredPrefixProtocol + newUrl
+	} else if hasHttpsProtocol && !hasWwwDot {
+		httpsProtocolColonTwoSlashesLength := 8
+		newUrl = URLRequiredPrefixProtocol + URLRequiredPrefixWWWDot + newUrl[httpsProtocolColonTwoSlashesLength:]
 	}
 
 	fmt.Print("Describe the bookmark. What's it for? ")
