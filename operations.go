@@ -44,19 +44,19 @@ func EditBookmark(handles *Handles) {
 	}
 
 	fmt.Println("If you want to leave a value set to what it was, press enter. Otherwise, enter a new value")
-	fmt.Printf("Update Bookmark named '%s':", (*handles.Categories)[indexes.CategoryIndex].Bookmarks[indexes.BookmarkIndex].Name)
+	fmt.Printf("Update Bookmark named '%s': ", (*handles.Categories)[indexes.CategoryIndex].Bookmarks[indexes.BookmarkIndex].Name)
 	updatedName := getScannedInput(handles.Scanner)
 	if updatedName != "" {
 		(*handles.Categories)[indexes.CategoryIndex].Bookmarks[indexes.BookmarkIndex].Name = updatedName
 	}
 
-	fmt.Printf("Update the URL: '%s'\n", (*handles.Categories)[indexes.CategoryIndex].Bookmarks[indexes.BookmarkIndex].Url)
+	fmt.Printf("Update the URL '%s': ", (*handles.Categories)[indexes.CategoryIndex].Bookmarks[indexes.BookmarkIndex].Url)
 	updatedUrl := getScannedInput(handles.Scanner)
 	if updatedUrl != "" {
 		(*handles.Categories)[indexes.CategoryIndex].Bookmarks[indexes.BookmarkIndex].Url = updatedUrl
 	}
 
-	fmt.Printf("Update the description '%s'\n", (*handles.Categories)[indexes.CategoryIndex].Bookmarks[indexes.BookmarkIndex].Description)
+	fmt.Printf("Update the description '%s': ", (*handles.Categories)[indexes.CategoryIndex].Bookmarks[indexes.BookmarkIndex].Description)
 	updatedDescription := getScannedInput(handles.Scanner)
 	if updatedDescription != "" {
 		(*handles.Categories)[indexes.CategoryIndex].Bookmarks[indexes.BookmarkIndex].Description = updatedDescription
