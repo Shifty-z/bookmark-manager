@@ -65,7 +65,7 @@ func EditBookmark(handles *Handles) {
 	writeFile(handles)
 }
 
-func Add(handles *Handles) {
+func AddBookmark(handles *Handles) {
 	// TODO: Handle uncategorized bookmarks if you don't want to supply a category
 	fmt.Print("Enter a category type for this bookmark: ")
 	category := getScannedInput(handles.Scanner)
@@ -118,7 +118,7 @@ func Add(handles *Handles) {
 	writeFile(handles)
 }
 
-func Delete(handles *Handles) {
+func DeleteBookmark(handles *Handles) {
 	fmt.Print("Provide a name for the bookmark you want to delete: ")
 	name := getScannedInput(handles.Scanner)
 	fmt.Printf("Searching for bookmark '%s'\n", name)
@@ -138,7 +138,7 @@ func Delete(handles *Handles) {
 	writeFile(handles)
 }
 
-func Select(handles *Handles) {
+func SelectBookmark(handles *Handles) {
 	fmt.Print("Enter the category number the bookmark is in: ")
 	categoryInput := getScannedInput(handles.Scanner)
 	fmt.Printf("You entered category '%s'\n", categoryInput)
