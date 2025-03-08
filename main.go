@@ -69,10 +69,11 @@ func main() {
 
 	categories := make([]Category, 0)
 
-	// TODO: If bytesRead is empty or nil, you should probably do something else
-	unmarshalErr := json.Unmarshal(bytesRead, &categories)
-	if unmarshalErr != nil {
-		fmt.Printf("Unmarshalling the file's contents caused an error %v\n", unmarshalErr)
+	if len(bytesRead) != 0 {
+		unmarshalErr := json.Unmarshal(bytesRead, &categories)
+		if unmarshalErr != nil {
+			fmt.Printf("Unmarshalling the file's contents caused an error %v\n", unmarshalErr)
+		}
 	}
 
 	stdin := bufio.NewScanner(os.Stdin)
