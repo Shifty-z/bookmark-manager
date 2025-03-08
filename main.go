@@ -87,10 +87,12 @@ func main() {
 	if flags.ShouldListAll {
 		ListAll(*handles.Categories)
 	} else if flags.ShouldEdit {
+		ListAll(*handles.Categories)
 		EditBookmark(&handles)
 	} else if flags.ShouldAdd {
 		AddBookmark(&handles)
 	} else if flags.ShouldDelete {
+		ListAll(*handles.Categories)
 		DeleteBookmark(&handles)
 	} else if flags.ShouldSelect {
 		ListAll(*handles.Categories)
