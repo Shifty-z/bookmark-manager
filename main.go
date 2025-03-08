@@ -92,6 +92,9 @@ func main() {
 		Add(&handles)
 	} else if flags.ShouldDelete {
 		Delete(&handles)
+	} else if flags.ShouldSelect {
+		ListAll(*handles.Categories)
+		Select(&handles)
 	}
 }
 
@@ -100,6 +103,7 @@ func parseFlags() CmdFlags {
 	shouldEdit := flag.Bool("edit", false, "Pass to edit a bookmark. Further prompts will guide you.")
 	shouldAdd := flag.Bool("add", false, "Add a new bookmark. Further prompts will guide you.")
 	shouldDelete := flag.Bool("delete", false, "Delete an existing bookmark. Further prompts will guide you.")
+	shouldSelect := flag.Bool("select", false, "Pick a bookmark from a list.")
 	flag.Parse()
 
 	return CmdFlags{
@@ -107,6 +111,7 @@ func parseFlags() CmdFlags {
 		ShouldEdit:    *shouldEdit,
 		ShouldAdd:     *shouldAdd,
 		ShouldDelete:  *shouldDelete,
+		ShouldSelect:  *shouldSelect,
 	}
 }
 
