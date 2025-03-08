@@ -89,12 +89,12 @@ func main() {
 	} else if flags.ShouldEdit {
 		EditBookmark(&handles)
 	} else if flags.ShouldAdd {
-		Add(&handles)
+		AddBookmark(&handles)
 	} else if flags.ShouldDelete {
-		Delete(&handles)
+		DeleteBookmark(&handles)
 	} else if flags.ShouldSelect {
 		ListAll(*handles.Categories)
-		Select(&handles)
+		SelectBookmark(&handles)
 	}
 }
 
@@ -128,7 +128,6 @@ func createDirIfNotExist(expectedPath string) {
 }
 
 func createFileIfNotExist(expectedPath string) {
-	fmt.Printf("Requested to create: %s\n", expectedPath)
 	_, err := os.Stat(expectedPath)
 
 	if err != nil && errors.Is(err, os.ErrExist) {
@@ -137,6 +136,7 @@ func createFileIfNotExist(expectedPath string) {
 	}
 
 	if err != nil && errors.Is(err, os.ErrNotExist) {
+		fmt.Printf("Creating bookmarks file %s\n", expectedPath)
 		_, createFileErr := os.Create(expectedPath)
 
 		if createFileErr != nil {
