@@ -19,6 +19,7 @@ const (
 func ListAll(categories []Category) {
 	fmt.Print("Listing all available categories and bookmarks\n\n")
 
+	// TODO: Make the index sequential rather than it actually following the array elements
 	for catIdx, value := range categories {
 		// Skip empty categories
 		if len(categories[catIdx].Bookmarks) == 0 {
@@ -171,6 +172,27 @@ func SelectBookmark(handles *Handles) {
 
 	if bookmarkConvertErr != nil {
 		fmt.Printf("Could not convert input while selecting a bookmark. Error: %v\n", bookmarkConvertErr)
+		os.Exit(ExitWithFailure)
+	}
+
+	// Prevent panics when the user provides a category or bookmark index that is out-of-bounds or doesn't exist
+	if categoryNumber <= -1 || bookmarkNumber <= -1 {
+		fmt.Printf("Selected values are not valid. Category number provided %d and bookmark number provided %d\n", categoryNumber, bookmarkNumber)
+		os.Exit(ExitWithFailure)
+	}
+
+	// Prevent panics by determining if the user's inputs are valid selections based on content displayed to them.
+	isValidSelection := false
+	for idx, category := range *handles.Categories {
+		for bmIdx := 0; bmIdx < len(category.Bookmarks); bmIdx++ {
+			if categoryNumber == idx && bookmarkNumber == bmIdx {
+				isValidSelection = true
+			}
+		}
+	}
+
+	if !isValidSelection {
+		fmt.Println("Your input did not match any of the selectable numbers. Enter a valid index.")
 		os.Exit(ExitWithFailure)
 	}
 
