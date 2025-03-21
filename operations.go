@@ -186,7 +186,6 @@ func SelectBookmark(handles *Handles) {
 	for idx, category := range *handles.Categories {
 		for bmIdx := 0; bmIdx < len(category.Bookmarks); bmIdx++ {
 			if categoryNumber == idx && bookmarkNumber == bmIdx {
-				fmt.Println("Selected a valid index!")
 				isValidSelection = true
 			}
 		}
