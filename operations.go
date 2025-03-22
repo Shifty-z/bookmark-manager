@@ -19,19 +19,21 @@ const (
 func ListAll(categories []Category) {
 	fmt.Print("Listing all available categories and bookmarks\n\n")
 
-	// TODO: Make the index sequential rather than it actually following the array elements
-	for catIdx, value := range categories {
-		// Skip empty categories
-		if len(categories[catIdx].Bookmarks) == 0 {
+	categoryCounter := 0
+	for _, value := range categories {
+		// Skip empty categories because they're not selectable
+		if len(value.Bookmarks) == 0 {
 			continue
 		}
 
-		fmt.Printf("%d %s\n", catIdx, value.String())
+		fmt.Printf("%d %s\n", categoryCounter, value.String())
 
 		for bookmarkIdx, bookmark := range value.Bookmarks {
 			fmt.Printf("--> %d %s\n", bookmarkIdx, bookmark.String())
 		}
 		fmt.Println("")
+
+		categoryCounter = categoryCounter + 1
 	}
 }
 
