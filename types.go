@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"fmt"
+	url2 "net/url"
 	"os"
 )
 
@@ -31,8 +32,27 @@ type Bookmark struct {
 	// Tag or folder types should be included
 }
 
+// String - Creates a string containing each field from the provided Bookmark. Does not modify any values before
+// returning the string.
 func (b Bookmark) String() string {
-	return fmt.Sprintf("Name: %s, Url: %s, Description: %s", b.Name, b.Url, b.Description)
+	return fmt.Sprintf("Name %s, URL %s, Description %s", b.Name, b.Url, b.Description)
+}
+
+// StringWithTruncatedURL - Creates a string containing each field from the provided Bookmark. Truncates the Bookmark's
+// URL to its domain and domain extension (e.g., example.org).
+func (b Bookmark) StringWithTruncatedURL() string {
+	parsedUrl, urlParseErr := url2.Parse(b.Url)
+
+	printableUrl := ""
+	if urlParseErr != nil {
+		fmt.Printf("Unable to shorten URL %s, so the entire URL will be used.\n", b.Url)
+		printableUrl = b.Url
+	}
+
+	// If you care about port number being included in this, swap to .Hostname()
+	printableUrl = parsedUrl.Host
+
+	return fmt.Sprintf("Name %s, URL %s, Description %s", b.Name, printableUrl, b.Description)
 }
 
 type CmdFlags struct {
