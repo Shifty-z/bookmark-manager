@@ -29,7 +29,7 @@ func ListAll(categories []Category) {
 		fmt.Printf("%d %s\n", categoryCounter, value.String())
 
 		for bookmarkIdx, bookmark := range value.Bookmarks {
-			fmt.Printf("--> %d %s\n", bookmarkIdx, bookmark.String())
+			fmt.Printf("--> %d: %s\n", bookmarkIdx, bookmark.StringWithTruncatedURL())
 		}
 		fmt.Println("")
 
@@ -289,6 +289,8 @@ func findBookmarkByName(handles *Handles, bookmarkName string) (Indexes, error) 
 		fmt.Printf("Multiple bookmarks with the name %s were found.\n", bookmarkName)
 		for idx, bookmark := range bookmarkIndexes {
 			fmt.Printf("Category '%s'\n", (*handles.Categories)[bookmark.CategoryIndex].Type)
+
+			// Since these are duplicated, continue using String(), so no information is hidden or modified.
 			fmt.Printf("--> %d %s\n", idx, (*handles.Categories)[bookmark.CategoryIndex].Bookmarks[bookmark.BookmarkIndex].String())
 		}
 
